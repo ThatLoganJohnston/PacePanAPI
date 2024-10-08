@@ -10,10 +10,21 @@ app.use(cors());
 
 app.get('/api', async (req, res) => {
     try {
-        const response = await fetch('https://paceman.gg/stats/api/getRecentRuns/?name=That_Logan_Guy&hours=24&limit=1');
-        const data = await response.json();
-        console.log(data); // Log the data for inspection
-        res.json(data);
+        // Fetch recent runs
+        const recentRunsResponse = await fetch('https://paceman.gg/stats/api/getRecentRuns/?name=That_Logan_Guy&hours=24&limit=1');
+        const recentRunsData = await recentRunsResponse.json();
+
+        // Fetch specific world stats
+        const worldStatsResponse = await fetch('https://paceman.gg/stats/api/getWorld/?worldId=661600');
+        const worldStatsData = await worldStatsResponse.json();
+
+        // Combine the data
+        const comparisonData = {
+            recentRun: recentRunsData[0],
+            worldStats: worldStatsData.data,
+        };
+
+        res.json(comparisonData);
     } catch (error) {
         res.status(500).send('Error fetching data');
     }
