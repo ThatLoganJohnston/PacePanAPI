@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import fetch from 'node-fetch';
+import path from 'path'; // Add this line
 
 const app = express();
 const PORT = 3000;
