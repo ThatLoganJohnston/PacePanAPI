@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Speedrun Overlay</title>
-    <style>
-        body {
-            background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent background */
-            color: white;
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-size: 2em; /* Font size for better visibility */
-        }
-    </style>
+    <title>Overlay</title>
 </head>
 <body>
-    <div id="timeDifference">Loading...</div>
-    <script src="script.js"></script>
+    <div id="overlay">Loading...</div>
+
+    <script>
+        function fetchData() {
+            fetch('/api') // Adjust the endpoint if needed
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('overlay').innerText = data.message; // Update the overlay
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+
+        // Fetch data every 5 seconds
+        setInterval(fetchData, 5000);
+    </script>
 </body>
 </html>
