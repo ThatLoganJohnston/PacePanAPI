@@ -17,6 +17,11 @@ app.get('/api', async (req, res) => {
     }
 });
 
+// Serve index.html
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 app.listen(PORT, () => {
     console.log(`Proxy server is running at http://localhost:${PORT}`);
 });
