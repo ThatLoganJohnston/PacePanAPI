@@ -2,7 +2,7 @@ const specificTime = 180000; // Example specific time in milliseconds
 
 const fetchData = async () => {
     try {
-        const response = await fetch('https://pacepanapi-production.up.railway.app/api'); // Update with your deployed URL
+        const response = await fetch('https://thatloganjohnston.github.io/PacePanAPI/api'); // Update with your deployed URL
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
