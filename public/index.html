@@ -10,6 +10,9 @@
     <div id="stats"></div>
 
     <script>
+    function msToSeconds(ms) {
+        return (ms / 1000).toFixed(2);
+    }
     async function fetchStats() {
         try {
             const response = await fetch('/api');
@@ -23,7 +26,8 @@
                 // Display recent run stats
                 document.getElementById('stats').innerHTML = `
                     <h2>Recent Run Stats</h2>
-                    <p>Nether: ${recentRun.nether}</p>
+                    <p>Nether: ${msToSeconds(recentRun.nether)}</p>
+                    <p>Nether: ${(recentRun.nether / 1000).toFixed(2)}</p>
                     <p>Fortress: ${recentRun.fortress}</p>
                     <p>Bastion: ${recentRun.bastion}</p>
                 `;
