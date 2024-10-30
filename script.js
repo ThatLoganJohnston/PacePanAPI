@@ -34,3 +34,28 @@ const processData = (data) => {
 // Fetch data every 30 seconds
 setInterval(fetchData, 30000);
 fetchData(); // Initial fetch
+
+const http = require('http');
+const { Server } = require("socket.io");
+
+const server = http.createServer();
+const io = new Server(server, {
+    cors: {
+        origin: "*",  // Or specify OBS overlay domain
+        methods: ["GET", "POST"]
+    }
+});
+
+io.on('connection', (socket) => {
+    console.log('Client connected:', socket.id);
+    
+    // Broadcast data changes
+    function sendUpdate(data) {
+        io.emit('update', data);
+    }
+
+    // Example broadcast interval
+    setInterval(() => sendUpdate({ message: 'New data!' }), 5000);
+});
+
+server.listen(8080, () => console.log('Socket server listening'));
