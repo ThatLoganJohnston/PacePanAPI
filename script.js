@@ -60,4 +60,9 @@ io.on('connection', (socket) => {
 
 server.listen(8080, () => console.log('Socket server listening'));
 
+const socket = new WebSocket('ws://https://pacepanapi-production.up.railway.app/');
 
+socket.onmessage = function(event) {
+    const data = JSON.parse(event.data);
+    processData(data); // Call your existing function to handle the new data
+};
