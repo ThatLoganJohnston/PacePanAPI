@@ -46,16 +46,16 @@ const io = new Server(server, {
     }
 });
 
-const socket = io('https://pacepanapi-production.up.railway.app'); // Use your deployed URL
+io.on('connection', (socket) => {
+    console.log('Client connected:', socket.id);
+    
+    // Broadcast data changes
+    function sendUpdate(data) {
+        io.emit('update', data);
+    }
 
-socket.on('connect', () => {
-    console.log('connected to WebSocket server');
+    // Example broadcast interval
+    setInterval(() => sendUpdate({ message: 'New data!' }), 5000);
 });
-
-socket.on('update', (data) => {
-    console.log("Real-time update received:", data);
-    // Update your DOM as needed
-});
-
 
 server.listen(8080, () => console.log('Socket server listening'));
