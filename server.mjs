@@ -3,7 +3,7 @@ import cors from 'cors';
 import fetch from 'node-fetch';
 import path from 'path';
 import http from 'http';
-import WebSocket from 'ws'; // Import the ws package
+import { WebSocketServer } from 'ws'; // Update this line
 
 const app = express();
 const PORT = 3000;
@@ -39,7 +39,7 @@ app.get('/', (req, res) => {
 
 // Create HTTP server and WebSocket server
 const server = http.createServer(app);
-const wss = new WebSocket.Server({ server }); // Create WebSocket server
+const wss = new WebSocketServer({ server });  // Create WebSocket server
 
 wss.on('connection', (ws) => {
     console.log('New client connected');
