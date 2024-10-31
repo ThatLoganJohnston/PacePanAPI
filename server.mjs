@@ -3,13 +3,14 @@ import cors from 'cors';
 import fetch from 'node-fetch';
 import path from 'path';
 import http from 'http';
-import { WebSocketServer } from 'ws'; // Update this line
+import { WebSocketServer } from 'ws';
 
 const app = express();
 const PORT = 3000;
 
 app.use(cors());
 
+// API endpoint to fetch data
 app.get('/api', async (req, res) => {
     try {
         const recentRunsResponse = await fetch('https://paceman.gg/stats/api/getRecentRuns/?name=That_Logan_Guy&hours=24&limit=1');
@@ -39,27 +40,35 @@ app.get('/', (req, res) => {
 
 // Create HTTP server and WebSocket server
 const server = http.createServer(app);
-const wss = new WebSocketServer({ server });  // Create WebSocket server
+const wss = new WebSocketServer({ server });
 
-wss.on('connection', (ws) => {
-    console.log('New client connected');
+// Fetch data and broadcast to connected clients
+const fetchDataAndBroadcast = async () => {
+    try {
+        const recentRunsResponse = await fetch('https://paceman.gg/stats/api/getRecentRuns/?name=That_Logan_Guy&hours=24&limit=1');
+        const recentRunsData = await recentRunsResponse.json();
 
-    ws.on('message', (message) => {
-        console.log(`Received message: ${message}`);
-    });
+        const worldStatsResponse = await fetch('https://paceman.gg/stats/api/getWorld/?worldId=661600');
+        const worldStatsData = await worldStatsResponse.json();
 
-    // Optional: Send a message to the new client
-    ws.send('Welcome to the WebSocket server!');
+        const comparisonData = {
+            recentRun: recentRunsData[0],
+            worldStats: worldStatsData.data,
+        };
 
-    // Broadcast a message to all clients every 5 seconds
-    setInterval(() => {
-        wss.clients.forEach((client) => {
+        // Broadcast to all clients
+        wss.clients.forEach(client => {
             if (client.readyState === WebSocket.OPEN) {
-                client.send('New data available!');
+                client.send(JSON.stringify(comparisonData));
             }
         });
-    }, 5000);
-});
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+};
+
+// Set interval for fetching data every 5 seconds
+setInterval(fetchDataAndBroadcast, 5000);
 
 // Start listening for connections
 server.listen(PORT, () => {
