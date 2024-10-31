@@ -41,3 +41,22 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Proxy server is running at http://localhost:${PORT}`);
 });
+
+import http from 'http';
+import { Server } from 'socket.io';
+
+const server = http.createServer(app); // Use your existing app instance
+const io = new Server(server);
+
+io.on('connection', (socket) => {
+    console.log('a user connected');
+    
+    // Optional: Broadcast to all clients
+    setInterval(() => {
+        socket.emit('update', { message: 'New data available!' });
+    }, 5000);
+});
+
+server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
