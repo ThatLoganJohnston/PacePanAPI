@@ -111,15 +111,12 @@
     fetchStats();
 </script>
 <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
-
 <script>
-    const socket = io('https://pacepanapi-production.up.railway.app');
+    const socket = io('https://pacepanapi-production.up.railway.app'); // Use your Railway URL
 
     socket.on('update', (data) => {
         console.log("Real-time update received:", data);
         // Update the DOM with the new data
-        // For example, you might want to call fetchStats() here to refresh the displayed stats
-        fetchStats();
     });
 </script>
 </body>
