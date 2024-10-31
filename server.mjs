@@ -6,20 +6,26 @@ import http from 'http';
 import { Server } from 'socket.io';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 
 app.use(cors());
 
 app.get('/api', async (req, res) => {
     try {
+        // Fetch recent runs
         const recentRunsResponse = await fetch('https://paceman.gg/stats/api/getRecentRuns/?name=That_Logan_Guy&hours=24&limit=1');
         const recentRunsData = await recentRunsResponse.json();
+
+        // Fetch specific world stats
         const worldStatsResponse = await fetch('https://paceman.gg/stats/api/getWorld/?worldId=661600');
         const worldStatsData = await worldStatsResponse.json();
+
+        // Combine the data
         const comparisonData = {
             recentRun: recentRunsData[0],
             worldStats: worldStatsData.data,
         };
+
         res.json(comparisonData);
     } catch (error) {
         res.status(500).send('Error fetching data');
@@ -34,7 +40,11 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(new URL('.', import.meta.url).pathname, 'public', 'index.html'));
 });
 
-// Create an HTTP server and a Socket.IO server
+app.listen(PORT, () => {
+    console.log(`Proxy server is running at http://localhost:${PORT}`);
+});
+
+const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
@@ -43,7 +53,7 @@ io.on('connection', (socket) => {
     console.log('a user connected');
 });
 
-// Start the server
+const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
