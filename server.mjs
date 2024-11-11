@@ -16,7 +16,7 @@ app.get('/api', async (req, res) => {
         const recentRunsResponse = await fetch('https://paceman.gg/stats/api/getRecentRuns/?name=That_Logan_Guy&hours=24&limit=1');
         const recentRunsData = await recentRunsResponse.json();
 
-        const worldStatsResponse = await fetch('https://paceman.gg/stats/api/getWorld/?worldId=661600');
+        const worldStatsResponse = await fetch('https://paceman.gg/stats/api/getWorld/?worldId=786692');
         const worldStatsData = await worldStatsResponse.json();
 
         const comparisonData = {
